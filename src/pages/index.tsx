@@ -1,5 +1,4 @@
 import DocumentHead from '../components/document-head'
-import ExtLink from '../components/ext-link'
 import styles from '../styles/page.module.css'
 
 const RenderPage = () => (
@@ -7,15 +6,8 @@ const RenderPage = () => (
     <DocumentHead />
 
     <div>
-      <h2>Welcome!</h2>
-      <p>Your easy-notion-blog deployed successfully!</p>
-      <p>Have fun!</p>
-      <p>
-        easy-notion-blog powered by{' '}
-        <ExtLink href="https://github.com/otoyo/easy-notion-blog">
-          otoyo/easy-notion-blog
-        </ExtLink>
-      </p>
+      <h2>ブログです。</h2>
+      <p>私が通った道を書いていくことで知の高速道路を目指します。</p>
     </div>
   </div>
 )
