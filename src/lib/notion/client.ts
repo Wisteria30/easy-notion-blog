@@ -8,6 +8,7 @@ import {
   Heading3,
   BulletedListItem,
   NumberedListItem,
+  ToDo,
   Image,
   Code,
   Quote,
@@ -25,6 +26,7 @@ import {
   Toggle,
   ColumnList,
   Column,
+  TableOfContents,
   RichText,
   Text,
   Annotation,
@@ -396,6 +398,8 @@ export async function getAllBlocksByBlockId(blockId: string) {
       block.BulletedListItem.Children = await getAllBlocksByBlockId(block.Id)
     } else if (block.Type === 'numbered_list_item' && block.HasChildren) {
       block.NumberedListItem.Children = await getAllBlocksByBlockId(block.Id)
+    } else if (block.Type === 'to_do' && block.HasChildren) {
+      block.ToDo.Children = await getAllBlocksByBlockId(block.Id)
     } else if (block.Type === 'synced_block') {
       block.SyncedBlock.Children = await _getSyncedBlockChildren(block)
     } else if (block.Type === 'toggle') {
@@ -462,6 +466,15 @@ function _buildBlock(item) {
 
       block.NumberedListItem = numberedListItem
       break
+    case 'to_do':
+      const toDo: ToDo = {
+        RichTexts: item.to_do.rich_text.map(_buildRichText),
+        Checked: item.to_do.checked,
+        Color: item.to_do.color,
+      }
+
+      block.ToDo = toDo
+      break
     case 'video':
       const video: Video = {
         Type: item.video.type,
@@ -490,7 +503,7 @@ function _buildBlock(item) {
     case 'code':
       const code: Code = {
         Caption: item[item.type].caption.map(_buildRichText),
-        Text: item[item.type].rich_text.map(_buildRichText),
+        RichTexts: item[item.type].rich_text.map(_buildRichText),
         Language: item.code.language,
       }
 
@@ -498,7 +511,7 @@ function _buildBlock(item) {
       break
     case 'quote':
       const quote: Quote = {
-        Text: item[item.type].rich_text.map(_buildRichText),
+        RichTexts: item[item.type].rich_text.map(_buildRichText),
         Color: item[item.type].color,
       }
 
@@ -582,6 +595,13 @@ function _buildBlock(item) {
       }
 
       block.ColumnList = columnList
+      break
+    case 'table_of_contents':
+      const tableOfContents: TableOfContents = {
+        Color: item.table_of_contents.color,
+      }
+
+      block.TableOfContents = tableOfContents
       break
   }
 
@@ -786,8 +806,14 @@ function _buildRichText(item) {
   if (item.type === 'text') {
     const text: Text = {
       Content: item.text.content,
-      Link: item.text.link,
     }
+
+    if (item.text.link) {
+      text.Link = {
+        Url: item.text.link.url,
+      }
+    }
+
     richText.Text = text
   } else if (item.type === 'equation') {
     const equation: Equation = {

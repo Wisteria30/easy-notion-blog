@@ -20,6 +20,7 @@ export interface Block {
   Heading3?: Heading3
   BulletedListItem?: BulletedListItem
   NumberedListItem?: NumberedListItem
+  ToDo?: ToDo
   Image?: Image
   Code?: Code
   Quote?: Quote
@@ -33,6 +34,7 @@ export interface Block {
   LinkPreview?: LinkPreview
   Table?: Table
   ColumnList?: ColumnList
+  TableOfContents?: TableOfContents
 }
 
 export interface Paragraph {
@@ -68,6 +70,13 @@ export interface NumberedListItem {
   Children?: Block[]
 }
 
+export interface ToDo {
+  RichTexts: RichText[]
+  Checked: boolean
+  Color: string
+  Children?: Block[]
+}
+
 export interface Image {
   Caption: RichText[]
   Type: string
@@ -93,12 +102,12 @@ export interface External {
 
 export interface Code {
   Caption: RichText[]
-  Text: RichText[]
+  RichTexts: RichText[]
   Language: string
 }
 
 export interface Quote {
-  Text: RichText[]
+  RichTexts: RichText[]
   Color: string
 }
 
@@ -171,6 +180,10 @@ export interface Column {
 export interface List {
   Type: string
   ListItems: Block[]
+}
+
+export interface TableOfContents {
+  Color: string
 }
 
 export interface RichText {
