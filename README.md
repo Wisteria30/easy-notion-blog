@@ -1,4 +1,4 @@
-English | [日本語](README.ja.md)
+English | [日本語](README.ja.md) | [한국어](README.kr.md)
 
 # easy-notion-blog
 
@@ -13,6 +13,8 @@ It helps you to start your Notion Blog easily and rapidly.
 - :pencil: Can write a blog **on your Notion**
 - :hammer_and_wrench: **Can fully customize** the site's appearance
 - :white_check_mark: Using **official Notion APIs**
+
+Please consider [astro-notion-blog](https://github.com/otoyo/astro-notion-blog) as it is being developed well.
 
 ## Screenshots
 
@@ -58,15 +60,20 @@ See also users' sites from [wiki](https://github.com/otoyo/easy-notion-blog/wiki
 
 - Node.js v16 or higher
 - [Yarn](https://yarnpkg.com/getting-started)
+- [direnv](https://github.com/direnv/direnv)
 
 ### Steps
 
 1. Fork this repo from "Fork" button and clone it into your local workspace.
-2. Create `.env.local` file just under the project root and put your environment variables as follows:
+2. Set the following environment variables with direnv in the project root.
 
 ```sh
-NOTION_API_SECRET=<YOUR_NOTION_API_SECRET>
-DATABASE_ID=<YOUR_DATABASE_ID>
+direnv edit .
+```
+
+```sh
+export NOTION_API_SECRET=<YOUR_NOTION_API_SECRET>
+export DATABASE_ID=<YOUR_DATABASE_ID>
 ```
 
 3. Install dependencies and start local server.
