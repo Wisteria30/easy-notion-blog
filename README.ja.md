@@ -1,4 +1,4 @@
-[English](README.md) | 日本語
+[English](README.md) | 日本語 | [한국어](README.kr.md)
 
 # easy-notion-blog
 
@@ -13,6 +13,8 @@ easy-notion-blog を使えばあっという間に Notion Blog を始めるこ�
 - :pencil: **自分のNotionで**ブログが書ける
 - :hammer_and_wrench: ブログの見た目を**自分好みにカスタマイズ可能**
 - :white_check_mark: **Notion 公式API**を使っているので安心
+
+開発が活発な [astro-notion-blog](https://github.com/otoyo/astro-notion-blog) もご検討ください。
 
 ## スクリーンショット
 
@@ -60,15 +62,20 @@ easy-notion-blog を使えばあっという間に Notion Blog を始めるこ�
 
 - Node.js v16 もしくはそれ以上
 - [Yarn](https://yarnpkg.com/getting-started)
+- [direnv](https://github.com/direnv/direnv)
 
 ### 手順
 
 1. このリポジトリをフォークしてローカルに clone します
-2. プロジェクトルートに `.env.local` ファイルを作成し下記のように環境変数を書き込みます
+2. プロジェクトルートで direnv を使って下記の環境変数を設定します
 
 ```sh
-NOTION_API_SECRET=<YOUR_NOTION_API_SECRET>
-DATABASE_ID=<YOUR_DATABASE_ID>
+direnv edit .
+```
+
+```sh
+export NOTION_API_SECRET=<YOUR_NOTION_API_SECRET>
+export DATABASE_ID=<YOUR_DATABASE_ID>
 ```
 
 3. 依存関係をインストールしローカルサーバーを起動します

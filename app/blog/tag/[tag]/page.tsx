@@ -1,5 +1,11 @@
+import type { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { NUMBER_OF_POSTS_PER_PAGE } from '../../../../app/server-constants'
+import {
+  NEXT_PUBLIC_URL,
+  NEXT_PUBLIC_SITE_TITLE,
+  NEXT_PUBLIC_SITE_DESCRIPTION,
+  NUMBER_OF_POSTS_PER_PAGE,
+} from '../../../../app/server-constants'
 import GoogleAnalytics from '../../../../components/google-analytics'
 import {
   BlogPostLink,
@@ -11,6 +17,7 @@ import {
   PostTitle,
   ReadMoreLink,
 } from '../../../../components/blog-parts'
+import { colorClass } from '../../../../components/notion-block'
 import styles from '../../../../styles/blog.module.css'
 import {
   getPosts,
@@ -19,12 +26,44 @@ import {
   getFirstPostByTag,
   getAllTags,
 } from '../../../../lib/notion/client'
+import '../../../../styles/notion-color.css'
 
 export const revalidate = 60
 
+export async function generateMetadata({ params: { tag: encodedTag } }): Promise<Metadata> {
+  const tag = decodeURIComponent(encodedTag)
+  const title = `Posts in ${tag} - ${NEXT_PUBLIC_SITE_TITLE}`
+  const description = NEXT_PUBLIC_SITE_DESCRIPTION
+  const url = NEXT_PUBLIC_URL ? new URL('/blog', NEXT_PUBLIC_URL) : undefined
+  const images = NEXT_PUBLIC_URL ? [{ url: new URL('/default.png', NEXT_PUBLIC_URL) }] : []
+
+  const metadata: Metadata = {
+    title: title,
+    openGraph: {
+      title: title,
+      description: description,
+      url: url,
+      siteName: title,
+      type: 'website',
+      images: images,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: title,
+      description: description,
+      images: images,
+    },
+    alternates: {
+      canonical: url,
+    },
+  }
+
+  return metadata
+}
+
 export async function generateStaticParams() {
   const tags = await getAllTags()
-  return tags.map(tag => ({ tag: tag }))
+  return tags.map(tag => ({ tag: tag.name }))
 }
 
 const BlogTagPage = async ({ params: { tag: encodedTag } }) => {
@@ -43,13 +82,15 @@ const BlogTagPage = async ({ params: { tag: encodedTag } }) => {
     getAllTags(),
   ])
 
+  const currentTag = posts[0].Tags.find(t => t.name === tag)
+
   return (
     <>
       <GoogleAnalytics pageTitle={`Posts in ${tag}`} />
       <div className={styles.container}>
         <div className={styles.mainContent}>
           <header>
-            <h2>{tag}</h2>
+            <h2><span className={`tag ${colorClass(currentTag.color)}`}>{tag}</span></h2>
           </header>
 
           {posts.map(post => {
